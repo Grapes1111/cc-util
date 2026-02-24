@@ -22,8 +22,8 @@ app.all("*", async (ctx, next) => {
     await next()
 })
 app.get('/', (c) => {
-    return c.text('Hello Hono!')
-})
+    return c.json({ message: "Alive" });
+});
 
 app.post("/interactions", async (ctx) => {
     const signature = ctx.req.header('x-signature-ed25519');

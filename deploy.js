@@ -15,7 +15,8 @@ const commands = [
                 choices: [
                     { name: "Bot Roles", value: "bot" },
                     { name: "Server roles", value: "server" },
-                    { name: "Colour roles", value: "colour" } 
+                    { name: "Colour roles", value: "colour" },
+                    { name: "All", value: "all" } 
                 ]
             }
         ]
