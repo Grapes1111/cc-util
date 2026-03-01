@@ -6,7 +6,6 @@ export default new ButtonCommand({
     customId: "rr_bot",
     async execute(ctx, interaction, reply) {
         const customId = interaction.data.custom_id;
-
         const [, roleId] = customId.split("-");
 
         if (!roleId) {
@@ -14,8 +13,8 @@ export default new ButtonCommand({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     content: "Role id not found in customId",
-                    flags: MessageFlags.Ephemeral
-                }
+                    flags: MessageFlags.Ephemeral,
+                },
             });
         }
 
@@ -26,28 +25,35 @@ export default new ButtonCommand({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     content: "Unable to resolve member object",
-                    flags: MessageFlags.Ephemeral
-                }
+                    flags: MessageFlags.Ephemeral,
+                },
             });
         }
 
-        const rest = ctx.get("rest");
-
-        let action: "added" | "removed";
-        if (member.roles.includes(roleId)) {
-            await rest.delete(Routes.guildMemberRole(ccGuildId, member.user.id, roleId));
-            action = "removed";
-        } else {
-            await rest.put(Routes.guildMemberRole(ccGuildId, member.user.id, roleId));
-            action = "added";
-        }
+        const action: "added" | "removed" = member.roles.includes(roleId)
+            ? "removed"
+            : "added";
 
         await reply({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: `Successfully ${action} <@&${roleId}> ${action === "added" ? "to" : "from"} you`,
-                flags: MessageFlags.Ephemeral
-            }
+                content: `Successfully ${action} <@&${roleId}> ${
+                    action === "added" ? "to" : "from"
+                } you`,
+                flags: MessageFlags.Ephemeral,
+            },
         });
-    }
+
+        const rest = ctx.get("rest");
+
+        if (action === "removed") {
+            await rest.delete(
+                Routes.guildMemberRole(ccGuildId, member.user.id, roleId),
+            );
+        } else {
+            await rest.put(
+                Routes.guildMemberRole(ccGuildId, member.user.id, roleId),
+            );
+        }
+    },
 });

@@ -21,8 +21,9 @@ import { sendMessage } from "../Utils/sendMessage";
 const BOT_ROLES_MESSAGE = {
     embeds: [
         new EmbedBuilder()
+            .setTitle("Bot & Notification Roles")
             .setDescription(
-                `Click below for roles\n<:status:1401608512106270840> - <@&1401606390178513148>\n<:update:1401606657045430402> - <@&1401606358092091423>\n📊 - <@&1475834120218083339>`,
+                `Select the roles below to stay updated with bot status and announcements.\n\n<:status:1401608512106270840> **Status Updates** - <@&1401606390178513148>\n<:update:1401606657045430402> **Bot Updates** - <@&1401606358092091423>\n📢 **Announcements** - <@&1477454261481898036>\n📊 **Polls** - <@&1475834120218083339>`,
             )
             .setColor(mainColour)
             .toJSON(),
@@ -41,6 +42,11 @@ const BOT_ROLES_MESSAGE = {
                     .setEmoji({ id: "1401606657045430402" })
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
+                    .setCustomId("rr_bot-1477454261481898036")
+                    .setLabel("Announcements")
+                    .setEmoji({ name: "📢" })
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
                     .setCustomId("rr_bot-1475834120218083339")
                     .setLabel("Polls")
                     .setEmoji({ name: "📊" })
@@ -53,7 +59,10 @@ const BOT_ROLES_MESSAGE = {
 const SERVER_ROLES_MESSAGE = {
     embeds: [
         new EmbedBuilder()
-            .setDescription(`Click below for roles\n💰 - <@&1382888450654601276>`)
+            .setTitle("Server Activity Roles")
+            .setDescription(
+                `Get notified for server-specific events and drops.\n\n💰 **Server Drops** - <@&1382888450654601276>\n🍬 **Event Pings** - <@&1429921404677128233>`,
+            )
             .setColor(mainColour)
             .toJSON(),
     ],
@@ -62,8 +71,13 @@ const SERVER_ROLES_MESSAGE = {
             .setComponents(
                 new ButtonBuilder()
                     .setCustomId("rr_bot-1382888450654601276")
-                    .setLabel("Server drops")
+                    .setLabel("Server Drops")
                     .setEmoji({ name: "💰" })
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId("rr_bot-1429921404677128233")
+                    .setLabel("Event Pings")
+                    .setEmoji({ name: "🍬" })
                     .setStyle(ButtonStyle.Secondary),
             )
             .toJSON(),
@@ -73,7 +87,8 @@ const SERVER_ROLES_MESSAGE = {
 const COLOUR_ROLES_MESSAGE = {
     embeds: [
         new EmbedBuilder()
-            .setDescription("Pick your colour role from the menu below:")
+            .setTitle("Color Roles")
+            .setDescription("Personalize your profile by picking a color role from the menu below:")
             .setColor(mainColour)
             .toJSON(),
     ],
@@ -82,7 +97,7 @@ const COLOUR_ROLES_MESSAGE = {
             .setComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId("rr_colour")
-                    .setPlaceholder("Select a colour role")
+                    .setPlaceholder("Choose a color...")
                     .addOptions([
                         { label: "Red", value: "1419739699567657040" },
                         { label: "Green", value: "1419739700234682520" },
@@ -99,8 +114,9 @@ const COLOUR_ROLES_MESSAGE = {
 const POG_ROLES_MESSAGE = {
     embeds: [
         new EmbedBuilder()
+            .setTitle("Pog Roles")
             .setDescription(
-                `Select your Pog roles below:\n\n<@&1385764630101754048>\n<@&1385764540050051202>\n<@&1385764529618555015>\n<@&1384281801148600590>\n<@&1385764456792985612>\n<@&1384281826561888288>`,
+                `Select the specific card notification roles you would like to receive:\n\n<@&1385764630101754048>\n<@&1385764540050051202>\n<@&1385764529618555015>\n<@&1384281801148600590>\n<@&1385764456792985612>\n<@&1384281826561888288>`,
             )
             .setColor(mainColour)
             .toJSON(),
@@ -110,7 +126,7 @@ const POG_ROLES_MESSAGE = {
             .setComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId("rr_pog")
-                    .setPlaceholder("Select Pog roles")
+                    .setPlaceholder("Select your Pog roles...")
                     .setMinValues(0)
                     .setMaxValues(6)
                     .addOptions([
@@ -133,13 +149,13 @@ export default new SlashCommand({
         .addStringOption((option) => {
             return option
                 .setName("type")
-                .setDescription("Type of reaction role")
+                .setDescription("Type of reaction role menu to send")
                 .addChoices(
                     { name: "Bot Roles", value: "bot" },
-                    { name: "Server roles", value: "server" },
-                    { name: "Colour roles", value: "colour" },
-                    { name: "Pog roles", value: "pog" },
-                    { name: "All", value: "all" },
+                    { name: "Server Roles", value: "server" },
+                    { name: "Colour Roles", value: "colour" },
+                    { name: "Pog Roles", value: "pog" },
+                    { name: "All Categories", value: "all" },
                 )
                 .setRequired(true);
         })
@@ -153,7 +169,7 @@ export default new SlashCommand({
             return await reply({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    content: "Unable to resolve member object",
+                    content: "Unable to resolve member object.",
                     flags: MessageFlags.Ephemeral,
                 },
             });
@@ -163,7 +179,7 @@ export default new SlashCommand({
             return await reply({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    content: "You must be an admin to use this command",
+                    content: "You must be an administrator to use this command.",
                     flags: MessageFlags.Ephemeral,
                 },
             });
@@ -179,7 +195,7 @@ export default new SlashCommand({
             return await reply({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    content: "No choice was found",
+                    content: "No valid menu type was selected.",
                     flags: MessageFlags.Ephemeral,
                 },
             });
@@ -210,7 +226,7 @@ export default new SlashCommand({
                 return await reply({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
-                        content: "Unknown option",
+                        content: "The selected option is unknown.",
                         flags: MessageFlags.Ephemeral,
                     },
                 });
@@ -219,7 +235,7 @@ export default new SlashCommand({
         await reply({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: "Sent the requested reaction role menu(s)",
+                content: "Successfully deployed the reaction role menu(s).",
                 flags: MessageFlags.Ephemeral,
             },
         });
