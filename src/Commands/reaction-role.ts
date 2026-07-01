@@ -61,7 +61,7 @@ const SERVER_ROLES_MESSAGE = {
         new EmbedBuilder()
             .setTitle("Server Activity Roles")
             .setDescription(
-                `Get notified for server-specific events and drops.\n\n💰 **Server Drops** - <@&1382888450654601276>\n🍬 **Event Pings** - <@&1429921404677128233>`,
+                `Get notified for server-specific events and drops.\n\n💰 **Server Drops** - <@&1382888450654601276>\n🍬 **Event Pings** - <@&1429921404677128233>\n🎉 **Giveaways** - <@&1520859685664591952>`,
             )
             .setColor(mainColour)
             .toJSON(),
@@ -78,6 +78,11 @@ const SERVER_ROLES_MESSAGE = {
                     .setCustomId("rr_bot-1429921404677128233")
                     .setLabel("Event Pings")
                     .setEmoji({ name: "🍬" })
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId("rr_bot-1520859685664591952")
+                    .setLabel("Giveaways")
+                    .setEmoji({ name: "🎉" })
                     .setStyle(ButtonStyle.Secondary),
             )
             .toJSON(),
